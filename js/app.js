@@ -43,19 +43,20 @@ function showAlert(msg) {
   }
 }
 
-function searchImages() {
+async function searchImages() {
   const query = document.querySelector("#termino").value.trim();
 
   const API_KEY = "38148669-07b7fcb70ef5e4d143b114404";
   const URL = `https://pixabay.com/api/?key=${API_KEY}&q=${query}&per_page=${resultsPerPage}&page=${currentPage}`;
 
-  fetch(URL)
-    .then(response => response.json())
-    .then(({ hits, totalHits }) => {
-
-      totalPages = calculatePages(totalHits);
-      showCards(hits);
-    });
+  try {
+    const response = await fetch(URL);
+    const { hits, totalHits } = await response.json();
+    totalPages = calculatePages(totalHits);
+    showCards(hits);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function showCards(images = []) {
